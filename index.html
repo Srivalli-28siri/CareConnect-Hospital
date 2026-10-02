@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareConnect Hospital</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">🏥 CareConnect</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#doctors">Doctors</a>
+    <a href="#book">Book Appointment</a>
+    <a href="#appointments">My Appointments</a>
+  </nav>
+</header>
+
+<section id="home" class="hero">
+  <div>
+    <p class="eyebrow">YOUR HEALTH, OUR PRIORITY</p>
+    <h1>Book your hospital appointment online.</h1>
+    <p>Find a doctor, choose a convenient time, and manage your appointments from one place.</p>
+    <a class="button" href="#book">Book an Appointment</a>
+  </div>
+</section>
+
+<section id="doctors" class="section">
+  <h2>Our Doctors</h2>
+  <div id="doctor-list" class="cards"></div>
+</section>
+
+<section id="book" class="section light">
+  <h2>Book Appointment</h2>
+  <form id="appointment-form" class="form">
+    <div class="grid">
+      <label>Patient Name
+        <input id="patient-name" required>
+      </label>
+      <label>Email
+        <input id="patient-email" type="email" required>
+      </label>
+      <label>Phone
+        <input id="patient-phone" required>
+      </label>
+      <label>Doctor
+        <select id="doctor-id" required></select>
+      </label>
+      <label>Date
+        <input id="appointment-date" type="date" required>
+      </label>
+      <label>Time
+        <input id="appointment-time" type="time" required>
+      </label>
+    </div>
+    <label>Reason for visit
+      <textarea id="reason" rows="4" placeholder="Briefly describe your reason for the visit"></textarea>
+    </label>
+    <button class="button" type="submit">Book Appointment</button>
+    <p id="form-message"></p>
+  </form>
+</section>
+
+<section id="appointments" class="section">
+  <h2>My Appointments</h2>
+  <div class="lookup">
+    <input id="lookup-email" type="email" placeholder="Enter your email">
+    <button class="button" onclick="loadAppointments()">View Appointments</button>
+  </div>
+  <div id="appointment-list"></div>
+</section>
+
+<footer>© 2026 CareConnect Hospital Appointment System</footer>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,77 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CareConnect Hospital</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareConnect Hospital</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <div class="brand">🏥 CareConnect</div>
-  <nav>
-    <a href="#home">Home</a>
-    <a href="#doctors">Doctors</a>
-    <a href="#book">Book Appointment</a>
-    <a href="#appointments">My Appointments</a>
-  </nav>
-</header>
 
-<section id="home" class="hero">
-  <div>
-    <p class="eyebrow">YOUR HEALTH, OUR PRIORITY</p>
-    <h1>Book your hospital appointment online.</h1>
-    <p>Find a doctor, choose a convenient time, and manage your appointments from one place.</p>
-    <a class="button" href="#book">Book an Appointment</a>
-  </div>
-</section>
+    <!-- Navigation -->
+    <header>
+        <h2>🏥 CareConnect</h2>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#doctors">Doctors</a>
+            <a href="#appointment">Appointment</a>
+            <a href="#appointments">Appointments</a>
+            <a href="#dashboard">Dashboard</a>
+        </nav>
+    </header>
 
-<section id="doctors" class="section">
-  <h2>Our Doctors</h2>
-  <div id="doctor-list" class="cards"></div>
-</section>
+    <!-- Home -->
+    <section id="home" class="hero">
+        <h1>Welcome to CareConnect Hospital</h1>
+        <p>Book your hospital appointment easily and quickly.</p>
+        <a href="#appointment" class="btn">Book Appointment</a>
+    </section>
 
-<section id="book" class="section light">
-  <h2>Book Appointment</h2>
-  <form id="appointment-form" class="form">
-    <div class="grid">
-      <label>Patient Name
-        <input id="patient-name" required>
-      </label>
-      <label>Email
-        <input id="patient-email" type="email" required>
-      </label>
-      <label>Phone
-        <input id="patient-phone" required>
-      </label>
-      <label>Doctor
-        <select id="doctor-id" required></select>
-      </label>
-      <label>Date
-        <input id="appointment-date" type="date" required>
-      </label>
-      <label>Time
-        <input id="appointment-time" type="time" required>
-      </label>
-    </div>
-    <label>Reason for visit
-      <textarea id="reason" rows="4" placeholder="Briefly describe your reason for the visit"></textarea>
-    </label>
-    <button class="button" type="submit">Book Appointment</button>
-    <p id="form-message"></p>
-  </form>
-</section>
+    <!-- Doctors -->
+    <section id="doctors">
+        <h2>Our Doctors</h2>
+        <div class="doctor-container">
+            <div class="doctor-card">
+                <h3>Dr. Anjali Rao</h3>
+                <p>❤️ Cardiologist</p>
+                <p>🕐 10:00 AM - 1:00 PM</p>
+            </div>
+            <div class="doctor-card">
+                <h3>Dr. Rahul Kumar</h3>
+                <p>🧴 Dermatologist</p>
+                <p>🕐 2:00 PM - 5:00 PM</p>
+            </div>
+            <div class="doctor-card">
+                <h3>Dr. Priya Sharma</h3>
+                <p>👶 Pediatrician</p>
+                <p>🕐 9:00 AM - 12:00 PM</p>
+            </div>
+        </div>
+    </section>
 
-<section id="appointments" class="section">
-  <h2>My Appointments</h2>
-  <div class="lookup">
-    <input id="lookup-email" type="email" placeholder="Enter your email">
-    <button class="button" onclick="loadAppointments()">View Appointments</button>
-  </div>
-  <div id="appointment-list"></div>
-</section>
+    <!-- Appointment -->
+    <section id="appointment">
+        <h2>Book an Appointment</h2>
 
-<footer>© 2026 CareConnect Hospital Appointment System</footer>
-<script src="script.js"></script>
+        <form id="appointmentForm">
+          
+            <table cellpadding="10" cellspacing="0" style="width: 100%; max-width: 500px;">
+                <tr>
+                    <td style="width: 150px; font-weight: bold;"><label for="patientName">Patient Name</label></td>
+                    <td><input type="text" id="patientName" placeholder="Enter your name" required style="width: 100%;"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;"><label for="email">Email</label></td>
+                    <td><input type="email" id="email" placeholder="Enter your email" required style="width: 100%;"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;"><label for="phone">Phone Number</label></td>
+                    <td><input type="tel" id="phone" placeholder="Enter your phone number" required style="width: 100%;"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;"><label for="doctor">Select Doctor</label></td>
+                    <td>
+                        <select id="doctor" required style="width: 100%;">
+                            <option value="">Select a doctor</option>
+                            <option>Dr. Anjali Rao - Cardiologist</option>
+                            <option>Dr. Rahul Kumar - Dermatologist</option>
+                            <option>Dr. Priya Sharma - Pediatrician</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;"><label for="date">Appointment Date</label></td>
+                    <td><input type="date" id="date" required style="width: 100%;"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;"><label for="time">Appointment Time</label></td>
+                    <td><input type="time" id="time" required style="width: 100%;"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold; vertical-align: top;"><label for="reason">Reason for Visit</label></td>
+                    <td><textarea id="reason" placeholder="Enter reason for appointment" style="width: 100%; height: 60px;"></textarea></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button type="submit" class="btn" style="padding: 8px 20px; cursor: pointer;">Book Appointment</button></td>
+                </tr>
+            </table>
+        </form>
+        <div id="message"></div>
+    </section>
+
+    <!-- Appointments -->
+    <section id="appointments">
+
+        <h2>Appointments</h2>
+
+        <input
+            type="text"
+            id="searchAppointment"
+            placeholder="Search patient name..."
+            onkeyup="searchAppointments()"
+          <select id="doctorFilter" onchange="filterByDoctor()">
+    <option value="">All Doctors</option>
+    <option value="Dr. Anjali Rao - Cardiologist">Dr. Anjali Rao - Cardiologist</option>
+    <option value="Dr. Rahul Kumar - Dermatologist">Dr. Rahul Kumar - Dermatologist</option>
+    <option value="Dr. Priya Sharma - Pediatrician">Dr. Priya Sharma - Pediatrician</option>
+          </select>
+        
+
+        <div id="appointmentsList">
+            <p>No appointments booked yet.</p>
+        </div>
+
+    </section>
+
+    <!-- Dashboard -->
+    <section id="dashboard">
+
+        <h2>Admin Dashboard</h2>
+
+        <div class="dashboard-container">
+
+            <div class="dashboard-card">
+                <h3>Total Appointments</h3>
+                <p id="totalAppointments">0</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Total Doctors</h3>
+                <p id="totalDoctors">3</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Total Patients</h3>
+                <p id="totalPatients">0</p>
+            </div>
+
+        </div>
+<div class="dashboard-card">
+    <h3>Upcoming Appointments</h3>
+    <p id="upcomingAppointments">0</p>
+</div>
+      <div class="dashboard-card">
+    <h3>Today's Appointments</h3>
+    <p id="todayAppointments">0</p>
+      </div>
+    </section>
+
+    <footer>
+        <p>© 2026 CareConnect Hospital</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

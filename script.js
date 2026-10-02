@@ -1,40 +1,75 @@
 let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+
 const today = new Date().toISOString().split("T")[0];
 
-document.getElementById("date").setAttribute("min", today);
-document.getElementById("appointmentForm").addEventListener("submit", function(event) {
-    event.preventDefault();
+const dateInput = document.getElementById("date");
 
-    const appointment = {
-        patientName: document.getElementById("patientName").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        doctor: document.getElementById("doctor").value,
-        date: document.getElementById("date").value,
-        time: document.getElementById("time").value,
-        reason: document.getElementById("reason").value
-    };
+if (dateInput) {
+    dateInput.setAttribute("min", today);
+}
 
-    appointments.push(appointment);
+const appointmentForm = document.getElementById("appointmentForm");
 
-    localStorage.setItem("appointments", JSON.stringify(appointments));
+if (appointmentForm) {
+    appointmentForm.addEventListener("submit", function(event) {
+        event.preventDefault();
 
-    document.getElementById("message").textContent =
-        "✅ Appointment booked successfully!";
+        const patientName = document.getElementById("patientName").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const doctor = document.getElementById("doctor").value;
+        const date = document.getElementById("date").value;
+        const time = document.getElementById("time").value;
+        const reason = document.getElementById("reason").value;
 
-    document.getElementById("message").style.color = "green";
+        const appointment = {
+            patientName,
+            email,
+            phone,
+            doctor,
+            date,
+            time,
+            reason
+        };
 
-    document.getElementById("appointmentForm").reset();
+        appointments.push(appointment);
 
-    displayAppointments();
-    updateDashboard();
-});
+        localStorage.setItem(
+            "appointments",
+            JSON.stringify(appointments)
+        );
 
+        const message = document.getElementById("message");
+
+        if (message) {
+            message.innerHTML = `
+                <div class="confirmation-box">
+                    <h3>✅ Appointment Confirmed!</h3>
+                    <p>Your appointment has been booked successfully.</p>
+                    <p><strong>Patient:</strong> ${patientName}</p>
+                    <p><strong>Doctor:</strong> ${doctor}</p>
+                    <p><strong>Date:</strong> ${date}</p>
+                    <p><strong>Time:</strong> ${time}</p>
+                </div>
+            `;
+
+            message.style.color = "green";
+        }
+
+        appointmentForm.reset();
+
+        displayAppointments();
+        updateDashboard();
+    });
+}
 
 function displayAppointments(list = appointments) {
-
     const appointmentsList =
         document.getElementById("appointmentsList");
+
+    if (!appointmentsList) {
+        return;
+    }
 
     appointmentsList.innerHTML = "";
 
@@ -45,7 +80,6 @@ function displayAppointments(list = appointments) {
     }
 
     list.forEach(function(appointment) {
-
         const index = appointments.indexOf(appointment);
 
         const card = document.createElement("div");
@@ -54,24 +88,14 @@ function displayAppointments(list = appointments) {
 
         card.innerHTML = `
             <h3>Appointment</h3>
-
             <p><strong>Patient:</strong> ${appointment.patientName}</p>
-
             <p><strong>Email:</strong> ${appointment.email}</p>
-
             <p><strong>Phone:</strong> ${appointment.phone}</p>
-
             <p><strong>Doctor:</strong> ${appointment.doctor}</p>
-
             <p><strong>Date:</strong> ${appointment.date}</p>
-
             <p><strong>Time:</strong> ${appointment.time}</p>
-
             <p><strong>Reason:</strong> ${appointment.reason || "Not specified"}</p>
-
-            <button
-                class="cancel-btn"
-                onclick="cancelAppointment(${index})">
+            <button class="cancel-btn" onclick="cancelAppointment(${index})">
                 Cancel Appointment
             </button>
         `;
@@ -80,46 +104,55 @@ function displayAppointments(list = appointments) {
     });
 }
 
-
 function searchAppointments() {
+    const searchInput =
+        document.getElementById("searchAppointment");
 
-    const searchText =
-        document.getElementById("searchAppointment").value.toLowerCase();
-
-    const filteredAppointments = appointments.filter(function(appointment) {
-
-        return appointment.patientName
-            .toLowerCase()
-            .includes(searchText);
-
-    });
-
-    displayAppointments(filteredAppointments);
-}
-function filterByDoctor() {
-
-    const selectedDoctor =
-        document.getElementById("doctorFilter").value;
-
-    if (selectedDoctor === "") {
-
-        displayAppointments(appointments);
-
+    if (!searchInput) {
         return;
     }
 
+    const searchText =
+        searchInput.value.toLowerCase();
+
     const filteredAppointments =
         appointments.filter(function(appointment) {
-
-            return appointment.doctor === selectedDoctor;
-
+            return appointment.patientName
+                .toLowerCase()
+                .includes(searchText);
         });
 
     displayAppointments(filteredAppointments);
 }
 
+function filterByDoctor() {
+    const doctorFilter =
+        document.getElementById("doctorFilter");
+
+    if (!doctorFilter) {
+        return;
+    }
+
+    const selectedDoctor =
+        doctorFilter.value;
+
+    if (selectedDoctor === "") {
+        displayAppointments(appointments);
+        return;
+    }
+
+    const filteredAppointments =
+        appointments.filter(function(appointment) {
+            return appointment.doctor === selectedDoctor;
+        });
+
+    displayAppointments(filteredAppointments);
+}
 
 function cancelAppointment(index) {
+    if (index < 0 || index >= appointments.length) {
+        return;
+    }
 
     appointments.splice(index, 1);
 
@@ -128,29 +161,32 @@ function cancelAppointment(index) {
         JSON.stringify(appointments)
     );
 
-   document.getElementById("message").innerHTML = `
-    <div class="confirmation-box">
-        <h3>✅ Appointment Confirmed!</h3>
-        <p>Your appointment has been booked successfully.</p>
-        <p><strong>Patient:</strong> ${patientName}</p>
-        <p><strong>Doctor:</strong> ${doctor}</p>
-        <p><strong>Date:</strong> ${date}</p>
-        <p><strong>Time:</strong> ${time}</p>
-    </div>
-`;
+    const message =
+        document.getElementById("message");
 
-    document.getElementById("message").style.color = "red";
+    if (message) {
+        message.innerHTML = `
+            <div class="confirmation-box">
+                <h3>❌ Appointment Cancelled</h3>
+                <p>The appointment has been cancelled successfully.</p>
+            </div>
+        `;
+
+        message.style.color = "red";
+    }
 
     displayAppointments();
-
     updateDashboard();
 }
 
-
 function updateDashboard() {
+    const totalAppointments =
+        document.getElementById("totalAppointments");
 
-    document.getElementById("totalAppointments").textContent =
-        appointments.length;
+    if (totalAppointments) {
+        totalAppointments.textContent =
+            appointments.length;
+    }
 
     const uniquePatients = new Set();
 
@@ -158,32 +194,47 @@ function updateDashboard() {
         uniquePatients.add(appointment.patientName);
     });
 
-    document.getElementById("totalPatients").textContent =
-        uniquePatients.size;
+    const totalPatients =
+        document.getElementById("totalPatients");
 
-    document.getElementById("totalDoctors").textContent =
-        "3";
-  const upcomingAppointments =
-    appointments.filter(function(appointment) {
+    if (totalPatients) {
+        totalPatients.textContent =
+            uniquePatients.size;
+    }
 
-        return appointment.date >= today;
+    const totalDoctors =
+        document.getElementById("totalDoctors");
 
-    });
+    if (totalDoctors) {
+        totalDoctors.textContent = "3";
+    }
 
-document.getElementById("upcomingAppointments").textContent =
-    upcomingAppointments.length;
-  const todayAppointments =
-    appointments.filter(function(appointment) {
+    const upcomingAppointments =
+        appointments.filter(function(appointment) {
+            return appointment.date >= today;
+        });
 
-        return appointment.date === today;
+    const upcoming =
+        document.getElementById("upcomingAppointments");
 
-    });
+    if (upcoming) {
+        upcoming.textContent =
+            upcomingAppointments.length;
+    }
 
-document.getElementById("todayAppointments").textContent =
-    todayAppointments.length;
+    const todayAppointments =
+        appointments.filter(function(appointment) {
+            return appointment.date === today;
+        });
+
+    const todayCount =
+        document.getElementById("todayAppointments");
+
+    if (todayCount) {
+        todayCount.textContent =
+            todayAppointments.length;
+    }
 }
 
-
 displayAppointments();
-
 updateDashboard();
